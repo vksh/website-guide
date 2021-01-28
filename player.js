@@ -24,4 +24,13 @@ function __5szm2kaj(response) {
     }, 1000);
         return;
     }
+    addStyle(response.data.css);
+}
+
+function addStyle(css){
+    let styleElement = $(`<style>${css}</style>`,{
+        type: 'text/css'
+    });
+    let headElement =  $('head');
+    headElement.append(styleElement);
 }
