@@ -25,6 +25,9 @@ function __5szm2kaj(response) {
         return;
     }
     addStyle(response.data.css);
+
+    let currentToolTip = response.data.structure.steps[0];
+    showTooltipGuide(null, response.data, currentToolTip);
 }
 
 function addStyle(css){
@@ -33,4 +36,55 @@ function addStyle(css){
     });
     let headElement =  $('head');
     headElement.append(styleElement);
+}
+
+function getToolTipElement(tiplates) {
+    let container = $('<div>', {
+        class: "sttip",
+    });
+    container.css({
+        "position": "absolute",
+        "display": "inline"
+    });
+    let parentElement = $('<div>', {
+        class: "tooltip"
+    });
+    parentElement.css({
+        "position": "absolute",
+        "display": "flex",
+        "align-items": "center"
+    });
+    let tooltipHtml = $.parseHTML(tiplates.tip);
+
+    parentElement.append(tooltipHtml);
+    container.append(parentElement);
+
+    return container;
+}
+
+function showTooltipGuide(previousIndex, tooltipData, currentIndex){
+    if(!currentIndex || currentIndex.id==="eol0") return;
+    if(previousIndex) previousIndex.remove();
+
+
+    let currentToolTip = getToolTipElement(tooltipData.tiplates);
+
+    $(currentIndex.action.selector).after(currentToolTip);
+    $('div.showDiv').after(currentToolTip)
+
+    $("div.tooltip").addClass(currentIndex.action.classes);
+    if(currentIndex.action.placement){
+        $("div.tooltip").addClass("in");
+        $("div.tooltip").addClass(currentIndex.action.placement);
+    }
+
+    const content = $.parseHTML(currentIndex.action.contents['#content']);
+
+    $("div.popover-title").prepend("Web app guide");
+    
+
+    $("div[data-iridize-id='content']").append(content);
+    $("span[data-iridize-role='stepsCount']").text(tooltipData.structure.steps.length);
+    $("span[data-iridize-role='stepCount']").text(currentIndex.action.stepOrdinal);
+   
 }
