@@ -4,8 +4,7 @@ jqScriptTag.id = "jqScript";
 jqScriptTag.src =
   "https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js";
 
-if (!document.getElementById("jqScript"))
-  document.getElementsByTagName("head")[0].append(jqScriptTag);
+document.getElementsByTagName("head")[0].append(jqScriptTag);
 
 playerScriptTag = document.createElement("script");
 playerScriptTag.type = "text/javascript";
@@ -13,8 +12,7 @@ playerScriptTag.id = "playerScript";
 playerScriptTag.src =
   "https://guidedlearning.oracle.com/player/latest/api/scenario/get/v_IlPvRLRWObwLnV5sTOaw/5szm2kaj/?callback=__5szm2kaj&amp;refresh=true&amp;env=dev&amp;type=startPanel&amp;vars%5Btype%5D=startPanel&amp;sid=none&amp;_=1582203987867";
 
-if (!document.getElementById("playerScript"))
-  document.getElementsByTagName("head")[0].append(playerScriptTag);
+document.getElementsByTagName("head")[0].append(playerScriptTag);
 
 var prevStepId;
 function __5szm2kaj(response) {
@@ -72,7 +70,12 @@ function getStepData(steps, stepId) {
 }
 
 function handleEvents(currentIndex, currentToolTip, tooltipData) {
+    
   $(".next-btn").click(() => {
+    if (currentIndex.action.roleTexts && currentIndex.action.roleTexts.nextBt) {
+        removeElement(currentToolTip);
+        return;
+    }
     prevStepId = currentIndex.id;
     showTooltipGuide(
       currentToolTip,
@@ -90,12 +93,19 @@ function handleEvents(currentIndex, currentToolTip, tooltipData) {
   });
 
   $("button[data-iridize-role='closeBt']").click(() => {
-    currentToolTip.remove();
+    removeElement();
+
   });
 
   $("button[data-iridize-role='laterBt']").click(() => {
-    currentToolTip.remove();
+   removeElement();
   });
+}
+
+function removeElement(currentToolTip) {
+    currentToolTip.remove();
+    $('#jqScript').remove();
+    $('#playerScript').remove();
 }
 
 function modifyElementCss() {
