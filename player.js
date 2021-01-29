@@ -6,6 +6,8 @@ jqScriptTag.src =
 
 document.getElementsByTagName("head")[0].append(jqScriptTag);
 
+
+
 playerScriptTag = document.createElement("script");
 playerScriptTag.type = "text/javascript";
 playerScriptTag.id = "playerScript";
@@ -13,6 +15,14 @@ playerScriptTag.src =
   "https://guidedlearning.oracle.com/player/latest/api/scenario/get/v_IlPvRLRWObwLnV5sTOaw/5szm2kaj/?callback=__5szm2kaj&amp;refresh=true&amp;env=dev&amp;type=startPanel&amp;vars%5Btype%5D=startPanel&amp;sid=none&amp;_=1582203987867";
 
 document.getElementsByTagName("head")[0].append(playerScriptTag);
+
+cssTag = document.createElement('link');
+cssTag.type = "text/css";
+cssTag.rel = "stylesheet";
+cssTag.href = 'https://guidedlearning.oracle.com/player/latest/static/css/stTip.css';
+
+document.getElementsByTagName("head")[0].append(cssTag);
+
 
 var prevStepId;
 function __5szm2kaj(response) {
@@ -93,19 +103,19 @@ function handleEvents(currentIndex, currentToolTip, tooltipData) {
   });
 
   $("button[data-iridize-role='closeBt']").click(() => {
-    removeElement();
+    removeElement(currentToolTip);
 
   });
 
   $("button[data-iridize-role='laterBt']").click(() => {
-   removeElement();
+   removeElement(currentToolTip);
   });
 }
 
 function removeElement(currentToolTip) {
     currentToolTip.remove();
-    $('#jqScript').remove();
     $('#playerScript').remove();
+    $('#jqScript').remove();
 }
 
 function modifyElementCss() {
