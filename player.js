@@ -12,7 +12,7 @@ playerScriptTag.src =
 
 document.getElementsByTagName("head")[0].append(playerScriptTag);
 
-let prevStepId;
+var prevStepId;
 function __5szm2kaj(response) {
   if (response.error === 1) {
     alert(`Error fetching guided tour setup : ${response.errormsg}`);
@@ -73,10 +73,7 @@ function handleEvents(currentIndex, currentToolTip, tooltipData) {
     showTooltipGuide(
       currentToolTip,
       tooltipData,
-      getStepData(
-        tooltipData.structure.steps,
-        currentIndex.followers[0].next
-      )
+      getStepData(tooltipData.structure.steps, currentIndex.followers[0].next)
     );
   });
 
@@ -97,6 +94,36 @@ function handleEvents(currentIndex, currentToolTip, tooltipData) {
   });
 }
 
+function modifyElementCss() {
+  $("div[aria-label='Steps']").css({
+    "background-color": "rgb(249 230 230)",
+    padding: "15px",
+    "box-shadow":
+      "rgba(0, 0, 0, 0.2) 0px 20px 20px 14px, rgba(0, 0, 0, 0.19) 0px 6px 20px 0px",
+    "min-width": "350px",
+  });
+
+  $("button[data-iridize-role='prevBt']").css({
+      "max-width": "85px",
+      "margin-right": "10px"
+  });
+
+  $("button[aria-label='Close']").css({
+    position: "absolute",
+    top: "5px",
+    right: "15px",
+    "font-size": "20px",
+    background: "nherit",
+    color: "red",
+    "font-weight": "bold",
+    border: "none",
+  });
+
+  $("div.popover-content").css({
+    background: "inherit",
+  });
+}
+
 function showTooltipGuide(previousIndex, tooltipData, currentIndex) {
   if (!currentIndex || currentIndex.id === "eol0") return;
   if (previousIndex) previousIndex.remove();
@@ -104,6 +131,7 @@ function showTooltipGuide(previousIndex, tooltipData, currentIndex) {
   let currentToolTip = getToolTipElement(tooltipData.tiplates);
 
   $(currentIndex.action.selector).after(currentToolTip);
+
   $("div.showDiv").after(currentToolTip);
 
   $("div.tooltip").addClass(currentIndex.action.classes);
@@ -117,6 +145,9 @@ function showTooltipGuide(previousIndex, tooltipData, currentIndex) {
   $("div.popover-title").prepend("Web app guide");
 
   $("div[data-iridize-id='content']").append(content);
+
+  modifyElementCss();
+
   $("span[data-iridize-role='stepsCount']").text(
     tooltipData.structure.steps.length
   );
