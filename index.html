@@ -4,12 +4,22 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Exercise</title>
+    <script>
+        function addBookMark(){
+            if(document.getElementById('bookmark')) return;
+            let playerScriptTag =  document.createElement("script");
+            playerScriptTag.type = "text/javascript";
+            playerScriptTag.src= 'https://vksh.github.io/website-guide/player.js'
+            playerScriptTag.id = 'bookmark'
+            document.body.appendChild(playerScriptTag);
+        }
+    </script>
   </head>
   <body>
     <p>
       Drag the button below to your bookmark section to add this as bookmark
     </p>
-    <a href="javascript:(function (){document.body.appendChild(document.createElement('script')).src='https://vksh.github.io/website-guide/player.js'})()">Click to add</a>
+    <a href="javascript:addBookMark()">Click to add</a>
   </body>
 </html>
 
