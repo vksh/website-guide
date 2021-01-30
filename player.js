@@ -6,8 +6,6 @@ jqScriptTag.src =
 
 document.getElementsByTagName("head")[0].append(jqScriptTag);
 
-
-
 playerScriptTag = document.createElement("script");
 playerScriptTag.type = "text/javascript";
 playerScriptTag.id = "playerScript";
@@ -16,15 +14,17 @@ playerScriptTag.src =
 
 document.getElementsByTagName("head")[0].append(playerScriptTag);
 
-cssTag = document.createElement('link');
+cssTag = document.createElement("link");
 cssTag.type = "text/css";
 cssTag.rel = "stylesheet";
-cssTag.href = 'https://guidedlearning.oracle.com/player/latest/static/css/stTip.css';
+cssTag.href =
+  "https://guidedlearning.oracle.com/player/latest/static/css/stTip.css";
 
 document.getElementsByTagName("head")[0].append(cssTag);
 
 
-var prevStepId;
+
+var prevStepId = [];
 function __5szm2kaj(response) {
   if (response.error === 1) {
     alert(`Error fetching guided tour setup : ${response.errormsg}`);
@@ -80,13 +80,12 @@ function getStepData(steps, stepId) {
 }
 
 function handleEvents(currentIndex, currentToolTip, tooltipData) {
-    
   $(".next-btn").click(() => {
     if (currentIndex.action.roleTexts && currentIndex.action.roleTexts.nextBt) {
-        removeElement(currentToolTip);
-        return;
+      removeElement(currentToolTip);
+      return;
     }
-    prevStepId = currentIndex.id;
+    prevStepId.push(currentIndex.id);
     showTooltipGuide(
       currentToolTip,
       tooltipData,
@@ -98,24 +97,23 @@ function handleEvents(currentIndex, currentToolTip, tooltipData) {
     showTooltipGuide(
       currentToolTip,
       tooltipData,
-      getStepData(tooltipData.structure.steps, prevStepId)
+      getStepData(tooltipData.structure.steps, prevStepId.pop())
     );
   });
 
   $("button[data-iridize-role='closeBt']").click(() => {
     removeElement(currentToolTip);
-
   });
 
   $("button[data-iridize-role='laterBt']").click(() => {
-   removeElement(currentToolTip);
+    removeElement(currentToolTip);
   });
 }
 
 function removeElement(currentToolTip) {
-    currentToolTip.remove();
-    $('#playerScript').remove();
-    $('#jqScript').remove();
+  currentToolTip.remove();
+  $("#playerScript").remove();
+  $("#jqScript").remove();
 }
 
 function modifyElementCss() {
@@ -149,6 +147,9 @@ function modifyElementCss() {
 }
 
 function showTooltipGuide(previousIndex, tooltipData, currentIndex) {
+  if ($(".sttip")) {
+    $(".sttip").remove();
+  }
   if (!currentIndex || currentIndex.id === "eol0") return;
   if (previousIndex) previousIndex.remove();
 
@@ -159,6 +160,9 @@ function showTooltipGuide(previousIndex, tooltipData, currentIndex) {
   $("div.showDiv").after(currentToolTip);
 
   $("div.tooltip").addClass(currentIndex.action.classes);
+  if(currentIndex.followers[0].next){
+      $("div.tooltip").removeClass('hideNextBt');   
+  }
   if (currentIndex.action.placement) {
     $("div.tooltip").addClass("in");
     $("div.tooltip").addClass(currentIndex.action.placement);
